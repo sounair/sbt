@@ -10,6 +10,7 @@ pipeline {
                 
 
                 // Run Maven on a Unix agent.
+                sh "echo $PATH"
                 sh "sbt compile"
                 sh "sbt package"
 
