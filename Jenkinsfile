@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'myubuntu' }
+    agent { label 'slave1' }
 
     
 
