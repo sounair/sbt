@@ -24,7 +24,7 @@ pipeline {
         }
      post {
         success {
-            sh "slack.sh"
+            sh "sh ./slack.sh"
         }
        
     }
