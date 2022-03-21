@@ -24,7 +24,7 @@ pipeline {
             }
         stage('Deploy'){
             steps{
-              sh "scp ./target/scala-3.1.1/scala3-example-project_3-0.1.0.jar root@10.66.24.183:/dev"
+              sh "scp -o StrictHostKeyChecking=no ./target/scala-3.1.1/scala3-example-project_3-0.1.0.jar root@10.66.24.183:/dev"
             }
         
         }
