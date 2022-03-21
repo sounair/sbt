@@ -13,6 +13,7 @@ pipeline {
                 sh "ls -l"
                 sh "sbt compile"
                 sh "sbt package"
+                sh "chmod +x ./slack.sh"
 
                 // To run Maven on a Windows agent, use
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
