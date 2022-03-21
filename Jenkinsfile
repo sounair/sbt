@@ -22,10 +22,5 @@ pipeline {
             
             }
         }
-     post {
-        success {
-           mail bcc: '', body: "<b>build successful</b><br>", subject: "build success", to: "sounair@gmail.com";  
-        }
-       
-    }
+    
     }
