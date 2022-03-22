@@ -27,15 +27,33 @@ stage('deploy Production') {
                    return params.ENVIRONMENT == 'PROD'
                 }
             }
-            steps {
+            steps 
+            {
+                script
+                {
+                    def userInput = input(id: 'userInput', message: 'Let\'s promote?(yes/no)', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'yes', description: 'prom', name: 'prom']])
+                    if (userInput != "yes"){
+                        currentBuild.result = 'FAILURE'
+                        error("Stopping early!")
+                    }
+                    
+                }
+            
+            
+            
+            
+            
+            
                     sh "scp -o StrictHostKeyChecking=no root@10.66.24.183:/develop/scala3-example-project_3-0.1.0.jar /tmp"
                     sh "scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@10.66.24.184:/prod"
                     sh """
                     echo "deploy to PROD"
                     """
                                     
-                }
+                
             }
+}
+            
    stage('Deploy to UACC') {
             when {
                 expression { 
