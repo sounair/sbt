@@ -1,75 +1,47 @@
 pipeline {
     agent { label 'slave1' }
 
-    
+
 
     stages {
-         stage('Setup parameters1') {
+        stage('Build') {
             steps {
-                script { 
-                    properties([
-                        parameters([
-                            choice(
-                                choices: ['UACC', 'PROD'], 
-                                name: 'ENVIRONMENT'
-                            )
-                             ])
-                              ])
-                }
-            }
-         }
-        
-            
-         
-stage('deploy Production') {
-           when {
-                expression { 
-                   return params.ENVIRONMENT == 'PROD'
-                }
-            }
-            steps 
-            {
-                script
-                {
-                    def userInput = input(id: 'userInput', message: 'Let\'s promote?(yes/no)', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'yes', description: 'prom', name: 'prom']])
-                    if (userInput != "yes"){
-                        currentBuild.result = 'FAILURE'
-                        error("Stopping early!")
-                    }
-                    
-                }
-            
-            
-            
-            
-                
-                    
-                    sh '(mydev=$(curl --request GET http://10.66.24.183:8500/v1/kv/dev |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no root@${mydev}:/develop/scala3-example-project_3-0.1.0.jar /tmp))'
-                    sh '(myprod=$(curl --request GET http://10.66.24.183:8500/v1/kv/prod |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@${myprod}:/prod))'
-                    sh """
-                    echo "deploy to PROD"
-                    """
-                                    
-                
-            }
-}
-            
-   stage('Deploy to UACC') {
-            when {
-                expression { 
-                   return params.ENVIRONMENT == 'UACC'
-                }
-            }
-            steps {
-                 sh '(mydev=$(curl --request GET http://10.66.24.183:8500/v1/kv/dev |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no root@${mydev}:/develop/scala3-example-project_3-0.1.0.jar /tmp))'
-                 sh '(myuacc=$(curl --request GET http://10.66.24.183:8500/v1/kv/uacc |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@${myuacc}:/uacc))'
+                // Get some code from a GitHub repository
+pipeline {
+    agent { label 'slave1' }
 
-                    sh """
-                    echo "deploy to UACC"
-                    """
-                }
+
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+
+
+                // Run Maven on a Unix agent.
+                sh "sbt compile"
+                sh "sbt package"
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-   
+
+
+            }
         }
-    
     }
+
+                // Run Maven on a Unix agent.
+                sh "sbt compile"
+                sh "sbt package"
+                sh "scp ./target/scala-3.1.1/scala3-example-project_3-0.1.0.jar root@10.66.24.183:/develop
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+
+            }
+        }
+    }
+~                                                                                                                                                                                                                  ~                                                                                                                                                                                                                  ~                        
