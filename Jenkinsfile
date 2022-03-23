@@ -42,10 +42,10 @@ stage('deploy Production') {
             
             
             
-            
-            
-                    sh "scp -o StrictHostKeyChecking=no root@10.66.24.183:/develop/scala3-example-project_3-0.1.0.jar /tmp"
-                    sh "scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@10.66.24.184:/prod"
+                
+                    
+                    sh '(mydev=$(curl --request GET http://10.66.24.183:8500/v1/kv/dev |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no root@${mydev}:/develop/scala3-example-project_3-0.1.0.jar /tmp))'
+                    sh '(myprod=$(curl --request GET http://10.66.24.183:8500/v1/kv/prod |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@${myprod}:/prod))'
                     sh """
                     echo "deploy to PROD"
                     """
@@ -61,8 +61,8 @@ stage('deploy Production') {
                 }
             }
             steps {
-                 sh "scp -o StrictHostKeyChecking=no root@10.66.24.183:/develop/scala3-example-project_3-0.1.0.jar /tmp"
-                 sh "scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@10.66.24.186:/uacc"
+                 sh '(mydev=$(curl --request GET http://10.66.24.183:8500/v1/kv/dev |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no root@${mydev}:/develop/scala3-example-project_3-0.1.0.jar /tmp))'
+                 sh '(myuacc=$(curl --request GET http://10.66.24.183:8500/v1/kv/uacc |jq .[0]."Value" -r | base64 --decode)&&(scp -o StrictHostKeyChecking=no /tmp/scala3-example-project_3-0.1.0.jar root@${myuacc}:/uacc))'
 
                     sh """
                     echo "deploy to UACC"
